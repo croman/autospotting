@@ -332,7 +332,7 @@ func (i *instance) isAllowed(instanceType string, allowedList []string, disallow
 				return true
 			}
 		}
-		logger.Println("\tNot in the list of allowed instance types")
+		//logger.Println("\tNot in the list of allowed instance types")
 		return false
 	} else if len(disallowedList) > 0 {
 		for _, a := range disallowedList {
@@ -369,14 +369,18 @@ func (i *instance) getCompatibleSpotInstanceTypesListSortedAscendingByPrice(allo
 	for _, k := range keys {
 		candidate := i.region.instanceTypeInformation[k]
 
+		if !i.isAllowed(candidate.instanceType, allowedList, disallowedList) {
+			continue
+		}
+
 		candidatePrice := i.calculatePrice(candidate)
 		logger.Println("Comparing current type", current.instanceType, "with price", i.price,
 			"with candidate", candidate.instanceType, "with price", candidatePrice)
 
 		if i.isAllowed(candidate.instanceType, allowedList, disallowedList) &&
 			i.isPriceCompatible(candidatePrice) &&
-			i.isEBSCompatible(candidate) &&
-			i.isClassCompatible(candidate) &&
+			// i.isEBSCompatible(candidate) &&
+			// i.isClassCompatible(candidate) &&
 			i.isStorageCompatible(candidate, attachedVolumesNumber) &&
 			i.isVirtualizationCompatible(candidate.virtualizationTypes) {
 			acceptableInstanceTypes = append(acceptableInstanceTypes, acceptableInstance{candidate, candidatePrice})

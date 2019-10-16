@@ -274,8 +274,8 @@ func (r *region) requestSpotPrices() error {
 		}
 
 		if r.instanceTypeInformation[instType].pricing.spot == nil {
-			logger.Println(r.name, "Instance data missing for", instType, "in", az,
-				"skipping because this region is currently not supported")
+			//logger.Println(r.name, "Instance data missing for", instType, "in", az,
+			//"skipping because this region is currently not supported")
 			continue
 		}
 
